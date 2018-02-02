@@ -32,4 +32,14 @@ public class Util {
 
 	    return (WorldGuardPlugin) plugin;
 	}
+
+	/**
+	 * チーム番号をエラーメッセージに埋め込みます
+	 * @see seichitournament.teams.Team.reason
+	 * @param teamNum チーム番号
+	 * @return エラーメッセージ(チーム番号埋め込み後)
+	 */
+	public static String replacePrefix(String reason, int teamNum) {
+		return reason.replaceAll("#team", Integer.toString(teamNum));
+	}
 }

@@ -17,28 +17,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SeichiTournament extends JavaPlugin {
 
-	public static SeichiTournament plugin;
-
-	static Player player = null ;
-	int TeamMAX = 0 ;
-	int GameTime = 0 ;
-	boolean EventMode = false ;
-
-	// 設定ファイルを読み込む
-	FileConfiguration conf=getConfig();
+	static SeichiTournament plugin;
+	static Config config;
+	static GameControler controler;
 
 	@Override
 	public void onEnable() {
-		// TODO 自動生成されたメソッド・スタブ
-
-		// もし設定ファイルがまだなければ、デフォルトの設定を保存する
-		saveDefaultConfig();
-
-		TeamMAX = conf.getInt("MemberMAX") ;
-		GameTime = conf.getInt("GameTime") ;
-		EventMode = conf.getBoolean("EventMode") ;
-
-
+		//順番厳守！！
+		plugin = this;
+		config = new Config(plugin);
+		controler = GameControler.getInstance();
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
@@ -54,7 +42,7 @@ public class SeichiTournament extends JavaPlugin {
 			List<String> team0member = new ArrayList<String>();
 			int checkresult = 0 ;
 
-			for (int loops = 0; loops < 999 ; loops ++){
+			for (int loops = 0; loops < 999 ; loops ++) {
 				if (loops == members.size()){
 					break;
 				}
@@ -103,11 +91,6 @@ public class SeichiTournament extends JavaPlugin {
 				}
 
 			}else if(args[0].equals("addmember")){
-
-			 	//
-			 	//saveconfigの処理がうまくできないため一時封印中。以降にconfig構造を変更している為、利用時は編集必須
-			 	//
-
 				//メンバー追加コマンド
 				if(!(args.length == 3)){
 					sender.sendMessage("コマンド形式は「/SeichiTourn addmember <追加したいユーザー名> <参加チーム>」です。");
