@@ -24,12 +24,12 @@ public class Team {
 
     /**
      * 安全にプレイヤーをチームに参加させます。
-     * @param playersList 参加させるプレイヤー名
+     * @param playerName 参加させるプレイヤー名
      * @return true: 参加可能(実際に参加させた) / false: 参加不可能
      */
-    public boolean addPlayersSafely(List<String> playersList) {
-        if (canAddPlayerToTeam()) {
-            players.addAll(playersList);
+    public boolean addPlayersSafely(String playerName) {
+        if (canAddPlayerToTeam() && !hasDuplication(playerName)) {
+            players.add(playerName);
             return true;
         } else {
             return false;
@@ -43,5 +43,17 @@ public class Team {
      */
     private boolean canAddPlayerToTeam() {
         return players.size() < teamMax;
+    }
+
+    /**
+     * プレイヤーが既にチームに参加しているかを返します。
+     * @param addPlayerName 参加すると予想されるプレイヤー名
+     * @return true: 重複する(既に参加) / false: 重複しない
+     */
+    private boolean hasDuplication(String addPlayerName) {
+        for (String checkName : players) {
+            if (checkName.equals(addPlayerName)) return true;
+        }
+        return false;
     }
 }

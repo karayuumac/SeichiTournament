@@ -7,7 +7,8 @@ MemberMAX: 5
 GameTime: 30
 #イベントモード(特殊イベント発生の有無)
 EventMode: false
-
+#チームの数
+Teams: 20
 
 ##メンバー設定
 ##member下にユーザー名を登録し、その下に更に「ユーザー名:所属チームNo」の形式で登録。
