@@ -1,6 +1,7 @@
 package seichitournament;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 /**
@@ -8,23 +9,23 @@ import org.bukkit.entity.Player;
  * @author karayuu
  */
 
-public class PlayerWarningExtension {
-    /** 警告を表示させるプレイヤー */
-    private Player receiver;
+class PlayerWarningExtension {
+    /** 警告を表示させる対象 */
+    private CommandSender receiver;
 
     /**
      * コンストラクタ
      * @param receiver 警告を表示させるプレイヤー
      */
-    PlayerWarningExtension(Player receiver) {
+    PlayerWarningExtension(CommandSender receiver) {
         this.receiver = receiver;
     }
 
     /**
-     * 警告を表示させます。デフォルトで強調表現(赤文字)になります
+     * 警告を表示させます。デフォルトで強調表現([ERROR]+赤文字)になります
      * @param msg 警告メッセージ
      */
-    public void sendWarning(String msg) {
-        receiver.sendMessage(ChatColor.RED + msg);
+    void sendWarning(String msg) {
+        receiver.sendMessage(ChatColor.RED + "[ERROR]" + msg);
     }
 }

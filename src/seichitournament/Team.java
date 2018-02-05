@@ -7,7 +7,7 @@ import java.util.List;
  * チーム管理クラス
  * @author karayuu
  */
-public class Team {
+class Team {
     /** プレイヤーネームの保存用List */
     private List<String> players = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class Team {
      * @param playerName 参加させるプレイヤー名
      * @return true: 参加可能(実際に参加させた) / false: 参加不可能
      */
-    public boolean addPlayersSafely(String playerName) {
+    boolean addPlayersSafely(String playerName) {
         if (canAddPlayerToTeam() && !hasDuplication(playerName)) {
             players.add(playerName);
             return true;
@@ -55,5 +55,19 @@ public class Team {
             if (checkName.equals(addPlayerName)) return true;
         }
         return false;
+    }
+
+    /**
+     * 所属プレイヤー名を表示用に整形済みStringを返します。
+     * (例) [karayuu,karayuu,karayuu,karayuu,karayuu,]
+     * @return 整形後String(表示用)
+     */
+    String getShapedPlayerName() {
+        StringBuilder result = new StringBuilder("[");
+        for (String playherName : players) {
+            result.append(playherName).append(",");
+        }
+        result.append("]");
+        return result.toString();
     }
 }

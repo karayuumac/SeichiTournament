@@ -17,15 +17,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SeichiTournament extends JavaPlugin {
 
-	public static SeichiTournament plugin;
+	static SeichiTournament plugin;
 
-	static Player player = null ;
-	int TeamMAX = 0 ;
-	int GameTime = 0 ;
-	boolean EventMode = false ;
+	static Player player = null;
+	int TeamMAX = 0;
+	int GameTime = 0;
+	boolean EventMode = false;
+	int teamNum = 0;
 
 	// 設定ファイルを読み込む
-	FileConfiguration conf=getConfig();
+	FileConfiguration conf = getConfig();
 
 	@Override
 	public void onEnable() {
@@ -34,47 +35,22 @@ public class SeichiTournament extends JavaPlugin {
 		// もし設定ファイルがまだなければ、デフォルトの設定を保存する
 		saveDefaultConfig();
 
-		TeamMAX = conf.getInt("MemberMAX") ;
-		GameTime = conf.getInt("GameTime") ;
-		EventMode = conf.getBoolean("EventMode") ;
+		TeamMAX = conf.getInt("MemberMAX");
+		GameTime = conf.getInt("GameTime");
+		EventMode = conf.getBoolean("EventMode");
+		teamNum = conf.getInt("Teams");
 
 
 	}
 
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         // プレイヤーがコマンドを投入した際の処理...
-		if(cmd.getName().equalsIgnoreCase("seichitourn")){
+		if (cmd.getName().equalsIgnoreCase("seichitourn")) {
 
-			//参加者データの読み込み・整理
-			player = (Player)sender ;
-			String[][] teams = new String[21][TeamMAX];
-			int[] counts = new int[21];
-			Arrays.fill(counts, 0);
-			List<String> members = conf.getStringList("member") ;
-			List<String> team0member = new ArrayList<String>();
-			int checkresult = 0 ;
+			GameManager manager = new GameManager(sender, teamNum, TeamMAX);
+			manager.SyncFromYml(conf);
 
-			for (int loops = 0; loops < 999 ; loops ++){
-				if (loops == members.size()){
-					break;
-				}
-				checkresult = conf.getInt(members.get(loops));
-
-				if(0 < checkresult && checkresult < 21){
-					if (counts[checkresult] == TeamMAX - 1){
-						sender.sendMessage("[ERROR]チームNo" + checkresult + "が上限を超えています");
-					}else{
-						teams[checkresult][counts[checkresult]] = members.get(loops);
-						counts[checkresult] ++ ;
-					}
-				}else if(checkresult == 0){
-					team0member.add(members.get(loops));
-				}else {
-					sender.sendMessage("[ERROR]「" + members.get(loops) + "」のチーム指定が不正です");
-				}
-			}
-
-			if(args.length == 0){
+			if (args.length == 0) {
 				sender.sendMessage("コマンド「seichitourn」は公式イベント「整地大会」用のコマンドです。");
 				sender.sendMessage("「/seichitourn members」：参加者の一覧を表示します。");
 				sender.sendMessage("「/seichitourn addmember」：参加者を追加・チーム移動する為のコマンド");
@@ -83,26 +59,23 @@ public class SeichiTournament extends JavaPlugin {
 				sender.sendMessage("「/seichitourn teleport」：参加者をテレポートさせます");
 				sender.sendMessage("「/seichitourn gamestart」：試合を開始します");
 				sender.sendMessage("「/seichitourn setting」：試合設定を確認・変更します");
-			}else if(args[0].equals("members")){
+			} else if(args[0].equals("members")) {
 				//参加者一覧表示コマンド
-				if(args.length == 1){
+				if (args.length == 1) {
 					//全参加者を表示
-					sender.sendMessage("全参加者:" + members);
-					sender.sendMessage("各チームごとの参加者については、コマンド末尾にチームNo[1～20]を入れてください");
-				}else {
-					if(!(Util.isInt(args[1]))){
-						sender.sendMessage("<チームNo>の項目は「数字(1～20)」で指定する必要があります。");
-					}else{
+					sender.sendMessage("全参加者:");
+					manager.sendPlayers(sender);
+					sender.sendMessage("各チームごとの参加者については、コマンド末尾にチームNo[1～" + TeamMAX +  "]を入れてください");
+				} else {
+					if(!(Util.isInt(args[1]))) {
+						sender.sendMessage("<チームNo>の項目は「数字(1～" + TeamMAX + ")」で指定する必要があります。");
+					} else {
 						//チーム参加者を表示
-						String membersforC = "チームNo" + args[1] + ":" ;
-						for(int i = 0 ; i < TeamMAX ; i++){
-							membersforC = membersforC + teams[Util.toInt(args[1])][i] + ", " ;
-						}
-						sender.sendMessage(membersforC);
+						manager.sendPlayersAtTeamNum(sender, Integer.valueOf(args[1]));
 					}
 				}
 
-			}else if(args[0].equals("addmember")){
+			} else if(args[0].equals("addmember")) {
 
 			 	//
 			 	//saveconfigの処理がうまくできないため一時封印中。以降にconfig構造を変更している為、利用時は編集必須
