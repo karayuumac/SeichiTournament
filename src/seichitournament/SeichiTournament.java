@@ -51,14 +51,7 @@ public class SeichiTournament extends JavaPlugin {
 			manager.SyncFromYml(conf);
 
 			if (args.length == 0) {
-				sender.sendMessage("コマンド「seichitourn」は公式イベント「整地大会」用のコマンドです。");
-				sender.sendMessage("「/seichitourn members」：参加者の一覧を表示します。");
-				sender.sendMessage("「/seichitourn addmember」：参加者を追加・チーム移動する為のコマンド");
-				sender.sendMessage("「/seichitourn removemember」：参加者を削除する為のコマンド");
-				sender.sendMessage("「/seichitourn setregion」：チーム情報をサーバに反映します");
-				sender.sendMessage("「/seichitourn teleport」：参加者をテレポートさせます");
-				sender.sendMessage("「/seichitourn gamestart」：試合を開始します");
-				sender.sendMessage("「/seichitourn setting」：試合設定を確認・変更します");
+				manager.sendUsageMsg();
 			} else if(args[0].equals("members")) {
 				//参加者一覧表示コマンド
 				if (args.length == 1) {

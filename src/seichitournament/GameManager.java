@@ -3,7 +3,6 @@ package seichitournament;
 import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.*;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -13,7 +12,7 @@ import java.util.*;
  */
 class GameManager {
     /** エラーを送信するコマンド送信者 */
-    private PlayerWarningExtension sender;
+    private PlayerMsgExtension sender;
 
     /** チームを管理するMap */
     private Map<Integer, Team> teamMap;
@@ -31,7 +30,7 @@ class GameManager {
      * @param teamMax 1チームあたりの最大人数
      */
     GameManager(CommandSender commandSender, int teamNum, int teamMax) {
-        this.sender = new PlayerWarningExtension(commandSender);
+        this.sender = new PlayerMsgExtension(commandSender);
         this.teamMap = new HashMap<>();
         this.teamMax = teamMax;
         for (int i = 1; i <= teamNum; i++) {
@@ -69,25 +68,6 @@ class GameManager {
         }
     }
 
-    /*
-    private List<String> getMembersList() {
-        List<String> playersList = new ArrayList<>();
-        for (Map.Entry<Integer, Team> entry : teamMap.entrySet()) {
-            playersList.addAll(entry.getValue().getPlayersList());
-        }
-        return playersList;
-    }
-
-    String getAllMembers() {
-        StringBuilder shapingStr = new StringBuilder();
-        List<String> playersList = getMembersList();
-        for (String playerName : playersList) {
-            shapingStr.append(" ").append(playerName);
-        }
-        return shapingStr.toString();
-    }
-    */
-
     /**
      * 各チームのプレイヤーを全員表示させます。
      * @param sender 送信する対象
@@ -110,5 +90,12 @@ class GameManager {
             return;
         }
         sender.sendMessage("チームNo." + teamNum + " : " + teamMap.get(teamNum).getShapedPlayerName());
+    }
+
+    /**
+     * コマンドの使用方法を表示させます。
+     */
+    void sendUsageMsg() {
+        sender.sendUsage();
     }
 }
