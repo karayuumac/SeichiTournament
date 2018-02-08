@@ -44,6 +44,7 @@ class GameManager {
      * @param fc FileConfiguartion
      */
     void SyncFromYml(FileConfiguration fc) {
+        sender.sendMsg("Ymlより読み込み作業を開始します。");
         List<String> playerList = fc.getStringList("member");
 
         for (String playerName : playerList) {
@@ -62,7 +63,7 @@ class GameManager {
 
             if (team.addPlayersSafely(playerName)) {
                 //重複＆満員チェック
-                sender.sendWarning("プレイヤー[" + playerName + "はチーム[No." + fc.getInt(playerName) + "]にすでに参加済みか,"
+                sender.sendWarning("プレイヤー[" + playerName + "]はチーム[No." + fc.getInt(playerName) + "]にすでに参加済みか,"
                     + "チーム[No." + fc.getInt(playerName) + "]が満員です");
             }
         }
@@ -72,7 +73,7 @@ class GameManager {
      * 各チームのプレイヤーを全員表示させます。
      * @param sender 送信する対象
      */
-    void sendPlayers(CommandSender sender) {
+    void sendAllPlayersName(CommandSender sender) {
         for (Map.Entry<Integer, Team> entry : teamMap.entrySet()) {
             sender.sendMessage(entry.getKey() + " : " + entry.getValue().getShapedPlayerName());
         }
@@ -90,12 +91,5 @@ class GameManager {
             return;
         }
         sender.sendMessage("チームNo." + teamNum + " : " + teamMap.get(teamNum).getShapedPlayerName());
-    }
-
-    /**
-     * コマンドの使用方法を表示させます。
-     */
-    void sendUsageMsg() {
-        sender.sendUsage();
     }
 }

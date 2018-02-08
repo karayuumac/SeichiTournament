@@ -30,16 +30,11 @@ class PlayerMsgExtension {
     }
 
     /**
-     * コマンド使用方法を表示させます。
+     * メッセージを表示させます。
+     * #sendWarning(msg)とは異なり強調表示を行いません。
+     * @param msg 送信するメッセージ
      */
-    void sendUsage() {
-        receiver.sendMessage("コマンド「seichitourn」は公式イベント「整地大会」用のコマンドです。");
-        receiver.sendMessage("「/seichitourn members」：参加者の一覧を表示します。");
-        receiver.sendMessage("「/seichitourn addmember」：参加者を追加・チーム移動する為のコマンド");
-        receiver.sendMessage("「/seichitourn removemember」：参加者を削除する為のコマンド");
-        receiver.sendMessage("「/seichitourn setregion」：チーム情報をサーバに反映します");
-        receiver.sendMessage("「/seichitourn teleport」：参加者をテレポートさせます");
-        receiver.sendMessage("「/seichitourn gamestart」：試合を開始します");
-        receiver.sendMessage("「/seichitourn setting」：試合設定を確認・変更します");
+    void sendMsg(String msg) {
+        receiver.sendMessage(msg);
     }
 }

@@ -30,8 +30,6 @@ public class SeichiTournament extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// TODO 自動生成されたメソッド・スタブ
-
 		// もし設定ファイルがまだなければ、デフォルトの設定を保存する
 		saveDefaultConfig();
 
@@ -39,7 +37,6 @@ public class SeichiTournament extends JavaPlugin {
 		GameTime = conf.getInt("GameTime");
 		EventMode = conf.getBoolean("EventMode");
 		teamNum = conf.getInt("Teams");
-
 
 	}
 
@@ -51,45 +48,52 @@ public class SeichiTournament extends JavaPlugin {
 			manager.SyncFromYml(conf);
 
 			if (args.length == 0) {
-				manager.sendUsageMsg();
-			} else if(args[0].equals("members")) {
+				sender.sendMessage("コマンド「seichitourn」は公式イベント「整地大会」用のコマンドです。");
+				sender.sendMessage("「/seichitourn members」：参加者の一覧を表示します。");
+				sender.sendMessage("「/seichitourn addmember」：参加者を追加・チーム移動する為のコマンド");
+				sender.sendMessage("「/seichitourn removemember」：参加者を削除する為のコマンド");
+				sender.sendMessage("「/seichitourn setregion」：チーム情報をサーバに反映します");
+				sender.sendMessage("「/seichitourn teleport」：参加者をテレポートさせます");
+				sender.sendMessage("「/seichitourn gamestart」：試合を開始します");
+				sender.sendMessage("「/seichitourn setting」：試合設定を確認・変更します");
+			} else if (args[0].equals("members")) {
 				//参加者一覧表示コマンド
 				if (args.length == 1) {
 					//全参加者を表示
 					sender.sendMessage("全参加者:");
-					manager.sendPlayers(sender);
-					sender.sendMessage("各チームごとの参加者については、コマンド末尾にチームNo[1～" + TeamMAX +  "]を入れてください");
+					manager.sendAllPlayersName(sender);
+					sender.sendMessage("各チームごとの参加者については、コマンド末尾にチームNo[1～" + teamNum +  "]を入れてください");
 				} else {
-					if(!(Util.isInt(args[1]))) {
-						sender.sendMessage("<チームNo>の項目は「数字(1～" + TeamMAX + ")」で指定する必要があります。");
+					if (!(Util.isInt(args[1]))) {
+						sender.sendMessage("<チームNo>の項目は「数字(1～" + teamNum + ")」で指定する必要があります。");
 					} else {
 						//チーム参加者を表示
 						manager.sendPlayersAtTeamNum(sender, Integer.valueOf(args[1]));
 					}
 				}
 
-			} else if(args[0].equals("addmember")) {
+			} else if (args[0].equals("addmember")) {
 
 			 	//
 			 	//saveconfigの処理がうまくできないため一時封印中。以降にconfig構造を変更している為、利用時は編集必須
 			 	//
 
 				//メンバー追加コマンド
-				if(!(args.length == 3)){
+				if (!(args.length == 3)) {
 					sender.sendMessage("コマンド形式は「/SeichiTourn addmember <追加したいユーザー名> <参加チーム>」です。");
-					sender.sendMessage("<参加チーム>の項目は「数字(1～16)」で指定する必要があります。");
+					sender.sendMessage("<参加チーム>の項目は「数字(1～" + teamNum + ")」で指定する必要があります。");
 					sender.sendMessage("チームが決まっていない場合は<参加チーム>の項目を「0」としてください。");
-				}else if(!(Util.isInt(args[2]))){
-					sender.sendMessage("<参加チーム>の項目は「数字(1～16)」で指定する必要があります。");
+				} else if (!(Util.isInt(args[2]))) {
+					sender.sendMessage("<参加チーム>の項目は「数字(1～+ " + teamNum +  ")」で指定する必要があります。");
 					sender.sendMessage("チームが決まっていない場合は<参加チーム>の項目を「0」としてください。");
-				}else{
+				} else {
 					String AddMember = args[1] ;
 					int SelectTeam = Integer.parseInt(args[2]);
 
 					String MemberAmount = "member." + SelectTeam;
-					if(conf.getInt(MemberAmount) == TeamMAX){
+					if (conf.getInt(MemberAmount) == TeamMAX) {
 						sender.sendMessage("選択したチームNo" + SelectTeam + "が上限人数の" + TeamMAX + "人に達している為登録できませんでした。");
-					}else{
+					} else {
 						String MemberData1 = "member.0." + AddMember ;
 						if(conf.contains(AddMember)){
 							//既に参加者になっている場合の処理
@@ -113,7 +117,8 @@ public class SeichiTournament extends JavaPlugin {
 
 					}
 				}
-			}else if (args[0].equals("setregion")){
+			}else if (args[0].equals("setregion")) {
+				/*
 				//各保護・ルナチャットにメンバーを設定
 				for (int loops = 1; loops < 21 ; loops ++){
 					player.chat("/rg removemember team_"+ loops +" -a");
@@ -142,6 +147,7 @@ public class SeichiTournament extends JavaPlugin {
 					}
 
 				}
+				*/
 
 			}else if (args[0].equals("gamestart")){
 				//試合進行コマンド
